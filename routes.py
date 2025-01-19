@@ -32,7 +32,6 @@ def register_routes(app):
     @app.route("/logout", methods=["POST"])
     @jwt_required()
     def logout():
-        # JWT tokens are stateless, so we can't invalidate them server-side
         return jsonify({"message": "Logout successful"}), 200
 
     @app.route("/user/update", methods=["PUT"])
