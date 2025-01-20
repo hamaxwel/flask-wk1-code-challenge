@@ -5,18 +5,6 @@ from models import User
 
 user_bp = Blueprint('user', __name__)
 
-@user_bp.route("/current_user", methods=["GET"])
-@jwt_required()
-def current_user():
-    user_id = get_jwt_identity()
-    user = User.query.get(user_id)
-    return jsonify(username=user.username, email=user.email), 200
-
-@user_bp.route("/logout", methods=["POST"])
-@jwt_required()
-def logout():
-    return jsonify({"message": "Logout successful"}), 200
-
 @user_bp.route("/user/update", methods=["PUT"])
 @jwt_required()
 def update_user():
@@ -46,3 +34,9 @@ def delete_account():
     db.session.delete(user)
     db.session.commit()
     return jsonify({"message": "Account deleted successfully"}), 200
+
+@user_bp.route("/users", methods=["GET"])
+@jwt_required()
+def get_users():
+    users = User.query.all()
+    return jsonify([{"id": user.id, "username": user.username, "email": user.email} for user in users]), 200
